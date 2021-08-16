@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "581497841588",
+    "project_id": "fir-udemy-be683",
+    "storage_bucket": "fir-udemy-be683.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581497841588:android:5a426566ef3535523a34e1",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581497841588-dke70ri5r8de0evme7idkh6f55ns2m4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm5ljXoYYQ9KBrPYymthDJtiRWxPtGczw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581497841588-dke70ri5r8de0evme7idkh6f55ns2m4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
