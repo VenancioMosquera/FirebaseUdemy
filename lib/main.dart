@@ -8,11 +8,24 @@ void main() async {
   await Firebase.initializeApp();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
-
+  /* //Adicionando e atualizando com set
   db
       .collection("users")
-      .doc("score")
-      .set({"Venancio": "250", "Isabela": "260"});
+      .doc("002")
+      .set({"nome": "Isabela Gerab", "idade": "23"});
+  */
+  /* //Adicionando com add
+  DocumentReference ref = await db
+      .collection("noticias")
+      .add({"titulo": "Acabou o corona!", "descricao": "Texto de exemplo..."});
+
+  print("item salvo: " + ref.id);
+  */
+  // Atualizando com set
+  db.collection("noticias").doc("xpLfMNCJl7rYGejCyyjP").set({
+    "titulo": "Acabou o corona! alterado",
+    "descricao": "Texto de exemplo..."
+  });
 
   runApp(MaterialApp(
     home: HomePage(),
