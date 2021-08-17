@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,6 +28,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _image = selectedImage;
     });
+  }
+
+  Future uploadImage() async {
+    //Referenciando a imagem
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference rootFolder = storage.ref();
+    Reference file = rootFolder.child("fotos/").child("foto1.jpg");
+
+    //Fazendo o upload da imagem para o Firebase Storage
+    file.putFile(File(_image!.path));
   }
 
   @override
@@ -60,7 +71,9 @@ class _HomePageState extends State<HomePage> {
               ),
               _image == null ? Container() : Image.file(File(_image!.path)),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  uploadImage();
+                },
                 child: Text("Upload Storage"),
               ),
             ],
