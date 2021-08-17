@@ -12,25 +12,45 @@ void main() async {
 
   //Criando usuário com e-mail e senha
   String email = "venancio@gmail.com";
-  String password = "123456";
-
-  /* // Criando usuário no firebase
-  auth
-      .createUserWithEmailAndPassword(email: email, password: password)
-      .then((firebaseUser) {
-    print("Novo usuário: Sucesso! E-mail: " + firebaseUser.user!.email!);
-  }).catchError((err) {
-    print("Erro: " + err);
-  });
+  String password = "12345";
+  /* 
+  // Criando usuário no firebase
+  try {
+    auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((firebaseUser) {
+      print("Novo usuário: Sucesso! E-mail: " + firebaseUser.user!.email!);
+    }).catchError((error) {
+      print("Erro: " + error);
+    });
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'weak-password') {
+      print('The password provided is too weak.');
+    } else if (e.code == 'email-already-in-use') {
+      print('The account already exists for that email.');
+    }
+  } catch (e) {}
   */
 
-  User? currentUser = auth.currentUser;
+  /* try {
+    await auth.signInWithEmailAndPassword(email: email, password: password);
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided for that user.');
+    }
+  } catch (e) {} */
 
-  if (currentUser != null) {
-    print("Usuário atual logado!\nEmail: " + currentUser.email!);
-  } else {
-    print("Usuário Deslogado!");
-  }
+  await auth.signOut();
+
+  auth.authStateChanges().listen((User? user) {
+    if (user == null) {
+      print("Usuário Deslogado!");
+    } else {
+      print("Usuário atual logado!\nEmail: " + user.email!);
+    }
+  });
 
   runApp(MaterialApp(
     home: HomePage(),
