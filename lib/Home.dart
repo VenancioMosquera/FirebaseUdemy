@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +14,8 @@ class _HomePageState extends State<HomePage> {
   ImagePicker _picker = ImagePicker();
 
   XFile? _image;
+  String _uploadStatus = "Upload não iniciado";
+  String? _urlImage;
 
   Future recoverImage(bool fromCamera) async {
     XFile? selectedImage;
@@ -37,7 +37,28 @@ class _HomePageState extends State<HomePage> {
     Reference file = rootFolder.child("fotos/").child("foto1.jpg");
 
     //Fazendo o upload da imagem para o Firebase Storage
-    file.putFile(File(_image!.path));
+    UploadTask task = file.putFile(File(_image!.path));
+
+    //Monitorar o progresso do upload
+    task.snapshotEvents.listen((event) {
+      if (event.state == TaskState.running) {
+        setState(() {
+          _uploadStatus = "Em progresso";
+        });
+      } else if (event.state == TaskState.success) {
+        setState(() {
+          _uploadStatus = "Upload realizado com sucesso!";
+        });
+      }
+    });
+
+    //Recuperando URL da imagem após o upload
+    task.then((TaskSnapshot snapshot) async {
+      String url = await snapshot.ref.getDownloadURL();
+      setState(() {
+        _urlImage = url;
+      });
+    });
   }
 
   @override
@@ -56,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("Upload não iniciado"),
+              Text(_uploadStatus),
               ElevatedButton(
                 onPressed: () {
                   recoverImage(true);
@@ -69,13 +90,20 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text("Galeria"),
               ),
-              _image == null ? Container() : Image.file(File(_image!.path)),
-              ElevatedButton(
-                onPressed: () {
-                  uploadImage();
-                },
-                child: Text("Upload Storage"),
-              ),
+              _image == null
+                  ? Container()
+                  : Image.file(
+                      File(_image!.path),
+                    ),
+              _image == null
+                  ? Container()
+                  : ElevatedButton(
+                      onPressed: () {
+                        uploadImage();
+                      },
+                      child: Text("Upload Storage"),
+                    ),
+              _urlImage == null ? Container() : Image.network(_urlImage!),
             ],
           ),
         ),
