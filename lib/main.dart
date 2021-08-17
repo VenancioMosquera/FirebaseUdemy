@@ -13,8 +13,10 @@ void main() async {
       .collection("users")
       //.where("nome", isEqualTo: "Venancio")
       //.where("idade", isEqualTo: "25")
-      .orderBy("idade", descending: true)
-      .limit(2)
+      //.orderBy("idade", descending: true)
+      //.limit(2)
+      .where("nome", isGreaterThanOrEqualTo: "Jo")
+      .where("nome", isLessThanOrEqualTo: "Jo" + "\uf8ff")
       .get();
 
   for (DocumentSnapshot item in querySnaphot.docs) {
